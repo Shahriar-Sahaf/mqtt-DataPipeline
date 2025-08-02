@@ -1,0 +1,25 @@
+{
+  "name": "userchannel",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.1",
+    "express": "^5.1.0",
+    "jest": "^30.0.5",
+    "jsonwebtoken": "^9.0.2",
+    "nodemon": "^3.1.10",
+    "path": "^0.12.7",
+    "pg": "^8.16.3",
+    "redis": "^5.6.1",
+    "socket.io": "^4.8.1",
+    "supertest": "^7.1.4"
+  }
+}

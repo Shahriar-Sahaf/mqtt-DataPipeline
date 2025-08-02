@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Real-Time Data</title>
+    <style> table, th, td { border: 1px solid black; } </style>
+</head>
+<body>
+
+    <h2>Login to View Data</h2>
+    <form id="loginForm">
+        <input type="text" id="id" placeholder="idNumber" required>
+        <input type="password" id="password" placeholder="password" required>
+        <button type="submit">Login</button>
+    </form>
+    <div id="status"></div>
+
+    <hr>
+    
+    <table style="width:100%">
+        <thead>
+            <tr>
+                <th>Device</th>
+                <th>Temperature</th>
+                <th>Humidity</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td id="device-cell"></td>
+                <td id="temperature-cell"></td>
+                <td id="humidity-cell"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const loginForm = document.getElementById('loginForm');
+        const statusDiv = document.getElementById('status');
+        
+        const deviceCell = document.getElementById('device-cell');
+        const temperatureCell = document.getElementById('temperature-cell');
+        const humidityCell = document.getElementById('humidity-cell');
+
+        let socket;
+
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const idNumber = document.getElementById('id').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ idNumber, password })
+                });
+                if (!response.ok) throw new Error('Login failed!');
+
+                const { token } = await response.json();
+                statusDiv.textContent = 'Login successful. Connecting...';
+                
+                connectSocket(token);
+
+            } catch (error) {
+                statusDiv.textContent = error.message;
+            }
+        });
+        
+        function connectSocket(token) {
+            if (socket) socket.disconnect();
+
+            socket = io({
+                auth: { token }
+            });
+
+            socket.on('connect', () => {
+                statusDiv.textContent = 'Connected to Server';
+            });
+        
+            socket.on('emitData', (msg) => {
+                try {
+                    if (typeof msg === 'string') {
+                        msg = JSON.parse(msg);
+                    }
+                
+                    deviceCell.textContent = msg.device || '---';
+                    temperatureCell.textContent = msg.temperature || '---';
+                    humidityCell.textContent = msg.humidity || '---';
+
+                } catch (error) {
+                    console.error('Error processing message:', error);
+                }
+            });
+        }
+    </script>
+</body>
+</html>
