@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const {mqttSimulator} = require('./simulator')
 
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -11,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 try {
   mqttSimulator();
-  console.log('MQTT Simulator started.');
+  console.log('MQTT Simulator started');
 } catch (err) {
   console.error('Failed to start MQTT Simulator:', err);
 }
