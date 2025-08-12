@@ -12,7 +12,7 @@ const port = process.env.PORT || 3000;
 
 try {
   mqttSimulator();
-  console.log('MQTT Simulator started');
+  console.log('MQTT Simulator start');
 } catch (err) {
   console.error('Failed to start MQTT Simulator:', err);
 }
