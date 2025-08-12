@@ -14,7 +14,7 @@ try {
   mqttSimulator();
   console.log('MQTT Simulator start');
 } catch (err) {
-  console.error('Failed to start MQTT Simulator:', err);
+  console.error('Failed To Start MQTT Simulator:', err);
 }
 
 app.listen(port,()=>{
